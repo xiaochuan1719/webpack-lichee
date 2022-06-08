@@ -1,3 +1,6 @@
+
+![webpack](./build-everything.png)
+
 # Webpack 
 
 Webpack 是一个用于现代 JavaScript 应用程序的静态模块打包工具，是目前最流行，社区最活跃的打包工具，是现代 Web 开发必须掌握的技能之一。
