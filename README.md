@@ -69,6 +69,8 @@ let Math = {
 ```javascript
 // IIFE 是一个定义时就会调用的函数，定义一个 IIFE 也很简单
 // IIFE 最后一定要加一个分号，表示结束
+
+// 形式一
 (function(arg) {
     console.log(arg) // window 对象
     const $ = jQuery = {}
@@ -77,6 +79,7 @@ let Math = {
     }
 })(window);
 
+// 形式二
 (function(arg){
     console.log(arg)
     const $ = jQuery = {}
@@ -85,7 +88,7 @@ let Math = {
     }
 }(window));
 
-// jquery 包装基本结构
+// 举个栗子：jquery 包装基本结构
 (function(global, factor) {
     // ...
 })(window, function(window, noGlobal) {
@@ -108,3 +111,66 @@ let Math = {
 > CommonJS 是一个项目，其目标是为 JavaScript 在网页浏览器之外创建模块约定。创建这个项目的主要原因是当时缺乏普遍可接受形式的 JavaScript 脚本模块单元，模块在与运行JavaScript 脚本的常规网页浏览器所提供的不同的环境下可以重复使用。
 
 Node.js 的出现，将 JavaScript 语言带到了服务端，面对文件系统、网络、操作系统等复杂业务场景，模块化不可或缺。 
+
+Node.js 应用由模块组成，每个文件就是一个模块，有私有的作用域。在一个文件里面定义的变量、函数、类，都是私有的，对其他文件是不可见的。
+
+```javascript
+// 定义一个模块：a.js
+const name = "Alpha"
+const age = 18
+
+// CommonJS 规范规定，每个模块内部有两个变量可以使用吗，require 和 module
+
+// 将模块中的变量或方法导出
+module.exports.name = name
+module.exports.getAge = function() {
+    return age
+}
+
+// 定义一个模块 b.js
+// 在模块中使用 a.js 模块中的变量和方法
+const a = require('./a.js')
+console.log(a.name)
+console.log(a.getAge())
+```
+
+> `module` 代表当前模块，是一个对象，保存了当前模块的信息。
+> `exports` 是 `module` 上的一个属性，保存了当前模块要导出的接口或者变量
+> `require` 用来加载某个模块
+
+#### `exports` 
+
+Node.js 在实现 CommonJS 规范时，为每个模块提供了一个 `exports` 的私有变量，指向 `module.exports`。
+
+```javascript
+const exports = module.exports
+```
+
+如果一个模块对外接口就是一个单一的值，可以直接使用 `module.exports` 导出
+
+```javascript
+const name = 'Alpha'
+const age = 18
+module.exports = name
+
+// 下面的写法是错误的
+// exports 虽然是指向 module.exports ,但是不可以直接导出一个变量；如下就是
+// 直接修改了 exports 的指向，不在指向 module.exports 了
+exports = age
+```
+
+#### `require`
+
+`require` 加载某个模块；读入并执行一个 js 文件（模块），然后返回该模块的 exports 对象。如果找不到指定模块，则会报错。
+
+> 模块在第一次加载后被缓存；意味着每次调用 `require` 都会返回完全相同的对象。
+> 如果 `require.cache` 没有被修改，则多次调用 `require('a')` 不会导致 a 模块代码被多次执行
+
+### AMD - Asynchronous Module Definition
+
+其典型代表就是 `Require.js`，或者说，AMD 就是 `RequireJS` 在推广过程中的对模块定义的规范化产出。
+
+`RequireJS` 是一个 js 文件和模块加载器，适合在浏览器中，也可以在其他 js 环境中使用，比如 Node、Rhino 等；
+
+`RequireJS`加载模块化脚本能提高代码的加载速度和质量。
+
