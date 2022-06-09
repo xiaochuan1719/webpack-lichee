@@ -31,6 +31,7 @@ JavaScript 模块化
 5. ES6 Module 规范
 ```
 
+
 ### 1. 基于对象的模块化
 
 在 CommonJS 规范出现之前，为了避免全局变量污染，常采用的一种方案就是将一类变量放在一个对象里面，作为对象的属性，使得这些变量私有化
@@ -104,7 +105,8 @@ let Math = {
 3. 难以测试和维护
 ```
 
-### CommonJS -- Node.js 的模块化
+
+### 3. CommonJS -- Node.js 的模块化
 
 > CommonJS 的出现是为了服务于服务器端的。
 
@@ -166,11 +168,23 @@ exports = age
 > 模块在第一次加载后被缓存；意味着每次调用 `require` 都会返回完全相同的对象。
 > 如果 `require.cache` 没有被修改，则多次调用 `require('a')` 不会导致 a 模块代码被多次执行
 
-### AMD - Asynchronous Module Definition
 
-其典型代表就是 `Require.js`，或者说，AMD 就是 `RequireJS` 在推广过程中的对模块定义的规范化产出。
+### 4. AMD - Asynchronous Module Definition
+
+其典型代表就是 `Require.js`，或者说，AMD 就是 `RequireJS` 在推广过程中对模块定义的规范化产出。它解决了 CommonJS 规范不能用于浏览器端的问题。
 
 `RequireJS` 是一个 js 文件和模块加载器，适合在浏览器中，也可以在其他 js 环境中使用，比如 Node、Rhino 等；
 
 `RequireJS`加载模块化脚本能提高代码的加载速度和质量。
+
+`RequireJS` 通过 `define` 方法将代码定义为模块，当这个模块被 `require` 时，它开始加载它的依赖的模块；当所有依赖模块都加载完成后，开始执行回调函数，返回值就是该模块的导出值。
+
+总结：AMD 采用的是异步方式加载模块，即：异步模块定义；模块的加载不影响后面的语句执行，所有依赖这个模块的语句，都定义在回调函数中，等待模块加载完后，回调函数才会执行。
+
+
+### 4. CMD - Common Module Definition
+
+其典型代表就是 `Sea.js`，或者说，CMD 就是 `Sea.js` 在推广过程中对模块定义的规范化产出。
+
+CMD 是对 AMD 模块组织形式的改进，更加直观的代码组织方式：依赖的自动加载、配置的简洁清晰
 
